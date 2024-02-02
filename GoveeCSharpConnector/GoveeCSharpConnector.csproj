@@ -12,6 +12,7 @@
         <PackageProjectUrl>https://github.com/Locxion/GoveeCSharpConnector</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Locxion/GoveeCSharpConnector</RepositoryUrl>
         <PackageLicenseUrl>https://github.com/Locxion/GoveeCSharpConnector/blob/main/LICENSE</PackageLicenseUrl>
+        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
