@@ -49,6 +49,15 @@ public interface IGoveeUdpService
     /// <param name="uniCastPort">Port of the Device. Standard 4003</param>
     /// <returns></returns>
     Task SetColor(string deviceAddress, RgbColor color, int uniCastPort = 4003);
+
+    /// <summary>
+    /// Sets the ColorTemp of the Device
+    /// </summary>
+    /// <param name="deviceAddress">Ip Address of the Device</param>
+    /// <param name="colorTempInKelvin"></param>
+    /// <param name="uniCastPort">Port of the Device. Standard 4003</param>
+    /// <returns></returns>
+    Task SetColorTemp(string deviceAddress, int colorTempInKelvin, int uniCastPort = 4003);
     /// <summary>
     /// Starts the Udp Listener
     /// </summary>
