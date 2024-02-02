@@ -8,8 +8,10 @@ namespace GoveeCsharpConnector.Example;
 
 public class Program
 {
-    private static GoveeApiService _goveeApiService = new GoveeApiService();
-    public static List<GoveeApiDevice> _apiDevices = new List<GoveeApiDevice>();
+    private static readonly GoveeApiService GoveeApiService = new ();
+    private static readonly GoveeUdpService GoveeUdpService = new ();
+    private static List<GoveeApiDevice> _apiDevices = new ();
+    private static List<GoveeUdpDevice> _udpDevices = new();
 
     public static async Task Main(string[] args)
     {
@@ -31,7 +33,7 @@ public class Program
                 break;
             case "2":
                 Console.WriteLine("Requesting Devices ...");
-                _apiDevices = await _goveeApiService.GetDevices();
+                _apiDevices = await GoveeApiService.GetDevices();
                 Console.WriteLine("Devices:");
                 foreach (var device in _apiDevices)
                 {
@@ -39,7 +41,6 @@ public class Program
                 }
                 Console.WriteLine($"Total: {_apiDevices.Count} Devices.");
                 EndSegment();
-
             break;
             case "3":
                 if (_apiDevices.Count == 0)
@@ -68,11 +69,11 @@ public class Program
 
                 if (input == "on")
                 {
-                    await _goveeApiService.ToggleState(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput).Model, true);
+                    await GoveeApiService.ToggleState(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput).Model, true);
                 }
                 else
                 {
-                    await _goveeApiService.ToggleState(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput).Model, false);
+                    await GoveeApiService.ToggleState(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput).Model, false);
                 }
                 EndSegment();
                 break;
@@ -102,7 +103,7 @@ public class Program
                     return;
                 }
 
-                await _goveeApiService.SetBrightness(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput2).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput2).Model, value);
+                await GoveeApiService.SetBrightness(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput2).DeviceId, _apiDevices.First(x => x.DeviceName.ToLower() == nameInput2).Model, value);
                 Console.WriteLine($"Set Brightness of Device {nameInput2} to {value}%!");
                 EndSegment();
                 break;
@@ -134,19 +135,115 @@ public class Program
                 switch (colorInput)
                 {
                     case "blue":
-                        await _goveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(0, 0 ,254));
+                        await GoveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(0, 0 ,254));
                         break;
                     case "green":
-                        await _goveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(0, 254 ,0));
+                        await GoveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(0, 254 ,0));
                         break;
                     case "red":
-                        await _goveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(254, 0 ,0));
+                        await GoveeApiService.SetColor(_apiDevices.First(x => x.DeviceName.ToLower() == nameInput3).DeviceId, model, new RgbColor(254, 0 ,0));
                         break;
                 }
                 Console.WriteLine($"Set Color of Device {nameInput3} to {colorInput}!");
                 EndSegment();
                 break;
+            case "6":
+                Console.WriteLine("Requesting Devices ...");
+                _udpDevices = await GoveeUdpService.GetDevices();
+                Console.WriteLine("Devices:");
+                foreach (var device in _udpDevices)
+                {
+                    Console.WriteLine($"IpAddress: {device.ip}, Device Id: {device.device}, Model: {device.sku}");
+                }
+                Console.WriteLine($"Total: {_udpDevices.Count} Devices.");
+                EndSegment();
+                break;
+            case "7":
+                var selectedDevice = GetUdpDeviceSelection();
+
+                Console.WriteLine($"Do you want to turn the Device {selectedDevice.ip} on or off?");
+                var onOffInput2 = Console.ReadLine()?.ToLower();
+                if (string.IsNullOrWhiteSpace(onOffInput2) || (onOffInput2 != "on" && onOffInput2 != "off"))
+                {
+                    Console.WriteLine("Invalid Input!");
+                    EndSegment();
+                    return;
+                }
+
+                if (input == "on")
+                {
+                    await GoveeUdpService.ToggleDevice(selectedDevice.ip, true);
+                }
+                else
+                {
+                    await GoveeUdpService.ToggleDevice(selectedDevice.ip, false);
+                }
+                EndSegment();
+                break;
+            case "8":
+                var selectedDevice2 = GetUdpDeviceSelection();
+
+                Console.WriteLine($"Please enter a Brightness Value for Device {selectedDevice2.ip}. 0-100");
+                var brightnessInput2 = Console.ReadLine();
+                int value2 = Convert.ToInt16(brightnessInput2);
+                if (string.IsNullOrWhiteSpace(brightnessInput2) || value2 < 0 || value2 > 100)
+                {
+                    Console.WriteLine("Invalid Input!");
+                    EndSegment();
+                    return;
+                }
+
+                await GoveeUdpService.SetBrightness(selectedDevice2.ip, value2);                
+                Console.WriteLine($"Set Brightness of Device {selectedDevice2.ip} to {value2}%!");
+                EndSegment();
+                break;
+            case "9":
+                var selectedDevice3 = GetUdpDeviceSelection();
+                Console.WriteLine($"Please choose a Color to set {selectedDevice3.ip} to ... (blue, red, green)");
+                var colorInput2 = Console.ReadLine()?.ToLower();
+                if (string.IsNullOrWhiteSpace(colorInput2) || (colorInput2 != "blue" && colorInput2 != "green" && colorInput2 != "red"))
+                {
+                    Console.WriteLine("Invalid Input!");
+                    EndSegment();
+                    return;
+                }
+
+                switch (colorInput2)
+                {
+                    case "blue":
+                        GoveeUdpService.SetColor(selectedDevice3.ip, new RgbColor(0, 0, 254));
+                        break;
+                    case "green":
+                        GoveeUdpService.SetColor(selectedDevice3.ip, new RgbColor(0, 254, 0));
+                        break;
+                    case "red":
+                        GoveeUdpService.SetColor(selectedDevice3.ip, new RgbColor(254, 0, 0));
+                        break;
+                }
+                Console.WriteLine($"Set Color of Device {selectedDevice3.ip} to {colorInput2}!");
+                EndSegment();
+                break;
         }
+    }
+
+    private static GoveeUdpDevice GetUdpDeviceSelection()
+    {
+        var count = 1;
+        Console.WriteLine("Please Choose a Device from the List:");
+        foreach (var device in _udpDevices)
+        {
+            Console.WriteLine($"{count} - IpAdress: {device.ip}, Device Id {device.device}, Model {device.sku}");
+            count++;
+        }
+
+        var input = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(input) || Int16.TryParse(input, out var result) is false)
+        {
+            Console.WriteLine("Invalid Input!");
+            return GetUdpDeviceSelection();
+        }
+
+        return _udpDevices[result];
     }
 
     private static void HandleApiInput()
@@ -161,7 +258,7 @@ public class Program
                 Console.WriteLine("Wrong Api Key Format!");
                 continue;
             }
-            _goveeApiService.SetApiKey(input);
+            GoveeApiService.SetApiKey(input);
             break;
         }
         Console.WriteLine("Api Key saved!");
@@ -180,7 +277,7 @@ public class Program
         Console.WriteLine($"Version: {Assembly.GetEntryAssembly()?.GetName().Version}");
         Console.WriteLine($"To test/explore the GoveeCSharpConnector Version: {Assembly.Load("GoveeCSharpConnector").GetName().Version}");
         Console.WriteLine("----------------------------------------------------------");
-        if (string.IsNullOrEmpty(_goveeApiService.GetApiKey()))
+        if (string.IsNullOrEmpty(GoveeApiService.GetApiKey()))
         {
             Console.WriteLine("1 - Enter GoveeApi Key - START HERE (Required for Api Service Options!)");
         }

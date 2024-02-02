@@ -48,7 +48,7 @@ public class GoveeUdpService : IGoveeUdpService
             };
             // Subscribe to ScanResultSubject
             var devicesTask = _scanResultSubject
-                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(200)))
+                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(300)))
                 .ToList()
                 .ToTask();
 
@@ -126,7 +126,7 @@ public class GoveeUdpService : IGoveeUdpService
         }
     }
     /// <inheritdoc/>
-    public async Task SetBrightness(string deviceAddress, short brightness, int uniCastPort = 4003)
+    public async Task SetBrightness(string deviceAddress, int brightness, int uniCastPort = 4003)
     {
         try
         {

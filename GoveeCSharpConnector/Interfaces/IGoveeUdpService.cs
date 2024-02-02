@@ -1,4 +1,8 @@
 ﻿using System.Data;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 using GoveeCSharpConnector.Objects;
 
 namespace GoveeCSharpConnector.Interfaces;
@@ -36,7 +40,7 @@ public interface IGoveeUdpService
     /// <param name="brightness">In Percent 1-100</param>
     /// <param name="uniCastPort">Port of the Device. Standard 4003</param>
     /// <returns></returns>
-    Task SetBrightness(string deviceAddress, short brightness, int uniCastPort = 4003);
+    Task SetBrightness(string deviceAddress, int brightness, int uniCastPort = 4003);
     /// <summary>
     /// Sets the Color of the Device
     /// </summary>
