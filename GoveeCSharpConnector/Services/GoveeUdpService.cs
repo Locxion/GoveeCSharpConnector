@@ -38,9 +38,9 @@ public class GoveeUdpService : IGoveeUdpService
         try
         {
             // Build Message
-            var message = new GoveeUdpMessage()
+            var message = new GoveeUdpMessage
             {
-                msg = new msg()
+                msg = new msg
                 {
                     cmd = "scan",
                     data = new { account_topic = "reserve" }
@@ -76,9 +76,9 @@ public class GoveeUdpService : IGoveeUdpService
         try
         {
             // Build Message
-            var message = new GoveeUdpMessage()
+            var message = new GoveeUdpMessage
             {
-                msg = new msg()
+                msg = new msg
                 {
                     cmd = "devStatus",
                     data = new { }
@@ -107,9 +107,9 @@ public class GoveeUdpService : IGoveeUdpService
         try
         {
             // Build Message
-            var message = new GoveeUdpMessage()
+            var message = new GoveeUdpMessage
             {
-                msg = new msg()
+                msg = new msg
                 {
                     cmd = "turn",
                     data = new { value = on ? 1 : 0 }
@@ -131,9 +131,9 @@ public class GoveeUdpService : IGoveeUdpService
         try
         {
             // Build Message
-            var message = new GoveeUdpMessage()
+            var message = new GoveeUdpMessage
             {
-                msg = new msg()
+                msg = new msg
                 {
                     cmd = "brightness",
                     data = new { value = brightness }
@@ -155,9 +155,9 @@ public class GoveeUdpService : IGoveeUdpService
         try
         {
             // Build Message
-            var message = new GoveeUdpMessage()
+            var message = new GoveeUdpMessage
             {
-                msg = new msg()
+                msg = new msg
                 {
                     cmd = "colorwc",
                     data = new 
@@ -173,7 +173,6 @@ public class GoveeUdpService : IGoveeUdpService
             };
             // Send Message
             SendUdpMessage(JsonSerializer.Serialize(message), deviceAddress, uniCastPort);
-
         }
         catch (Exception e)
         {
@@ -181,6 +180,39 @@ public class GoveeUdpService : IGoveeUdpService
             throw;
         }
     }
+
+    public async Task SetColorTemp(string deviceAddress, int colorTempInKelvin, int uniCastPort = 4003)
+    {
+        try
+        {
+            // Build Message
+            var message = new GoveeUdpMessage
+            {
+                msg = new msg
+                {
+                    cmd = "colorwc",
+                    data = new
+                    {
+                        color = new
+                        {
+                            r = 0,
+                            g = 0,
+                            b = 0
+                        },
+                        colorTempInKelvin = colorTempInKelvin
+                    }
+                }
+            };
+            // Send Message
+            SendUdpMessage(JsonSerializer.Serialize(message), deviceAddress, uniCastPort);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     /// <inheritdoc/>
     public async void StartUdpListener()
     {
