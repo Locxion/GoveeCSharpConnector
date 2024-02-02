@@ -11,7 +11,10 @@ public class GoveeApiService : IGoveeApiService
     private string _apiKey = string.Empty;
     private const string GoveeApiAddress = "https://developer-api.govee.com/v1";
     private readonly HttpClient _httpClient = new();
-
+    private readonly JsonSerializerOptions? _jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
     /// <inheritdoc/>
     public void SetApiKey(string apiKey)
     {
@@ -74,7 +77,7 @@ public class GoveeApiService : IGoveeApiService
                 Value = commandObject
             }
         };
-        var httpContent = new StringContent(JsonSerializer.Serialize(commandRequest), Encoding.UTF8, "application/json");
+        var httpContent = new StringContent(JsonSerializer.Serialize(commandRequest, _jsonOptions), Encoding.UTF8, "application/json");
         var response = await _httpClient.PutAsync($"{GoveeApiAddress}/devices/control", httpContent);
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Govee Api Request failed. Status code: {response.StatusCode}, Message: {response.Content}");

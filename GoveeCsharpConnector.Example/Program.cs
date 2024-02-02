@@ -123,7 +123,7 @@ public class Program
                 }
                 Console.WriteLine($"Please choose a Color to set {nameInput3} to ... (blue, red, green)");
                 var colorInput = Console.ReadLine()?.ToLower();
-                if (string.IsNullOrWhiteSpace(colorInput) || colorInput != "blue" || colorInput != "green" || colorInput != "red")
+                if (string.IsNullOrWhiteSpace(colorInput) || (colorInput != "blue" && colorInput != "green" && colorInput != "red"))
                 {
                     Console.WriteLine("Invalid Input!");
                     EndSegment();
