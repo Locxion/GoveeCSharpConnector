@@ -1,7 +1,7 @@
-using System.Xml.Linq;
+using GoveeCSharpConnector.Interfaces;
 using GoveeCSharpConnector.Objects;
 
-namespace GoveeCSharpConnector.Interfaces;
+namespace GoveeCSharpConnector.Services;
 
 public class GoveeService : IGoveeService
 {
