@@ -22,7 +22,8 @@ public class GoveeService : IGoveeService
         if (!onlyLan)
             return devices;
 
-        _udpService.StartUdpListener();
+        if (!_udpService.IsListening())
+            _udpService.StartUdpListener();
         
         var udpDevices = await _udpService.GetDevices();
 
@@ -37,7 +38,8 @@ public class GoveeService : IGoveeService
     {
         if (useUdp)
         {
-            _udpService.StartUdpListener();
+            if (!_udpService.IsListening())
+                _udpService.StartUdpListener();
             if (string.IsNullOrWhiteSpace(goveeDevice.Address)) throw new Exception("Device not available via Udp/Lan");
             var udpState = await _udpService.GetState(goveeDevice.Address);
             return new GoveeState() { State = udpState.onOff, Brightness = udpState.brightness, Color = udpState.color, ColorTempInKelvin = udpState.colorTempInKelvin };
