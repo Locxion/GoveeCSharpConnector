@@ -5,6 +5,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <LangVersion>latest</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>CSharp Library to control Govee Lights via Govee Web Api and Lan Udp!</Title>
+        <Authors>Locxion</Authors>
+        <Description>CSharp Library to control Govee Lights via Govee Web Api and Lan Udp!</Description>
+        <PackageProjectUrl>https://github.com/Locxion/GoveeCSharpConnector</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Locxion/GoveeCSharpConnector</RepositoryUrl>
+        <PackageLicenseUrl>https://github.com/Locxion/GoveeCSharpConnector/blob/main/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
 
     <ItemGroup>
