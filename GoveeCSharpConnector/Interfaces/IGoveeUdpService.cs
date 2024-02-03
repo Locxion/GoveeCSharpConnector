@@ -12,7 +12,7 @@ public interface IGoveeUdpService
     /// <summary>
     /// Sends a Scan Command via Udp Multicast.
     /// </summary>
-    /// <param name="timeout">Standard 200ms</param>
+    /// <param name="timeout">Standard 250ms</param>
     /// <returns>List of GoveeUdpDevices</returns>
     Task<List<GoveeUdpDevice>> GetDevices(TimeSpan? timeout = null);
 
@@ -21,7 +21,7 @@ public interface IGoveeUdpService
     /// </summary>
     /// <param name="deviceAddress">Ip Address of the Device</param>
     /// <param name="uniCastPort">Port of the Device. Standard 4003</param>
-    /// <param name="timeout">Standard 200ms</param>
+    /// <param name="timeout">Standard 250ms</param>
     /// <returns></returns>
     Task<GoveeUdpState> GetState(string deviceAddress, int uniCastPort = 4003, TimeSpan? timeout = null);
 

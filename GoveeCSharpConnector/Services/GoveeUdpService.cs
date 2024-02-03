@@ -32,6 +32,8 @@ public class GoveeUdpService : IGoveeUdpService
     /// <inheritdoc/>
     public async Task<List<GoveeUdpDevice>> GetDevices(TimeSpan? timeout = null)
     {
+        if (!_udpListenerActive)
+            throw new Exception("Udp Listener not started!");
         // Block this Method until current call reaches end of Method
         await _semaphore.WaitAsync();
 
@@ -48,7 +50,7 @@ public class GoveeUdpService : IGoveeUdpService
             };
             // Subscribe to ScanResultSubject
             var devicesTask = _scanResultSubject
-                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(300)))
+                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(250)))
                 .ToList()
                 .ToTask();
 
@@ -73,6 +75,8 @@ public class GoveeUdpService : IGoveeUdpService
     /// <inheritdoc/>
     public async Task<GoveeUdpState> GetState(string deviceAddress, int uniCastPort = 4003, TimeSpan? timeout = null)
     {
+        if (!_udpListenerActive)
+            throw new Exception("Udp Listener not started!");
         try
         {
             // Build Message
@@ -86,7 +90,7 @@ public class GoveeUdpService : IGoveeUdpService
             };
             // Subscribe to ScanResultSubject
             var devicesTask = _stateResultSubject
-                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(200)))
+                .TakeUntil(Observable.Timer(timeout ?? TimeSpan.FromMilliseconds(250)))
                 .ToTask();
 
             // Send Message
@@ -228,6 +232,8 @@ public class GoveeUdpService : IGoveeUdpService
     public void StopUdpListener()
     {
         _udpListenerActive = false;
+        _udpClient.DropMulticastGroup(IPAddress.Parse(GoveeMulticastAddress));
+        _udpClient.Close();
     }
 
     private static void SendUdpMessage(string message, string receiverAddress, int receiverPort)
@@ -249,12 +255,13 @@ public class GoveeUdpService : IGoveeUdpService
         }
     }
 
-    private void SetupUdpClientListener()
+    private async void SetupUdpClientListener()
     {
         _udpClient.ExclusiveAddressUse = false;
         var localEndPoint = new IPEndPoint(IPAddress.Any, GoveeMulticastPortListen);
         _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
         _udpClient.Client.Bind(localEndPoint);
+        await StartListener();
     }
 
     private async Task StartListener()
@@ -277,10 +284,9 @@ public class GoveeUdpService : IGoveeUdpService
                 }
             });
         }
-        finally
+        catch(Exception ex)
         {
-            _udpClient.DropMulticastGroup(IPAddress.Parse(GoveeMulticastAddress));
-            _udpClient.Close();
+            throw ex;
         }
     }
 

@@ -243,7 +243,7 @@ public class Program
             return GetUdpDeviceSelection();
         }
 
-        return _udpDevices[result];
+        return _udpDevices[result-1];
     }
 
     private static void HandleApiInput()
