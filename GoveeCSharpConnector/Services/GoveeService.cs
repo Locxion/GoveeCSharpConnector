@@ -19,6 +19,7 @@ public class GoveeService : IGoveeService
     {
         if (string.IsNullOrWhiteSpace(GoveeApiKey)) throw new Exception("No Govee Api Key Set!");
         _apiService.SetApiKey(GoveeApiKey);
+
         var apiDevices = await _apiService.GetDevices();
         var devices = apiDevices.Select(apiDevice => new GoveeDevice() { DeviceId = apiDevice.DeviceId, DeviceName = apiDevice.DeviceName, Model = apiDevice.Model, Address = "onlyAvailableOnUdpRequest" }).ToList();
         if (!onlyLan)
@@ -87,6 +88,7 @@ public class GoveeService : IGoveeService
             return;
         }
         if (string.IsNullOrWhiteSpace(GoveeApiKey)) throw new Exception("No Govee Api Key Set!");
+
         _apiService.SetApiKey(GoveeApiKey);
         await _apiService.SetColor(goveeDevice.DeviceId, goveeDevice.Model, color);
     }
