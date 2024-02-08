@@ -12,17 +12,19 @@
         <PackageProjectUrl>https://github.com/Locxion/GoveeCSharpConnector</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Locxion/GoveeCSharpConnector</RepositoryUrl>
         <PackageLicenseUrl>https://github.com/Locxion/GoveeCSharpConnector/blob/main/LICENSE</PackageLicenseUrl>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-
+    <ItemGroup>
+        <!-- Add a README.md next to the csproj -->
+        <None Include="README.md" Pack="true" PackagePath=""/>
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
       <PackageReference Include="System.Reactive" Version="6.0.0" />
       <PackageReference Include="System.Text.Json" Version="8.0.1" />
     </ItemGroup>
-
     <ItemGroup>
       <Folder Include="Properties\" />
     </ItemGroup>
-
 </Project>
