@@ -1,6 +1,7 @@
 ﻿using GoveeCSharpConnector.Objects;
 
 namespace GoveeCSharpConnector.Interfaces;
+    [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
 
 public interface IGoveeApiService
 {
@@ -9,6 +10,8 @@ public interface IGoveeApiService
     /// Request Api Key in the Mobile Phone App.
     /// </summary>
     /// <param name="apiKey">Api Key as String</param>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     void SetApiKey(string apiKey);
 
     /// <summary>
@@ -26,6 +29,8 @@ public interface IGoveeApiService
     /// Requests all Devices registered to Api Key Govee Account
     /// </summary>
     /// <returns>List of GoveeApiDevices</returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task<List<GoveeApiDevice>> GetDevices();
 
     /// <summary>
@@ -34,6 +39,8 @@ public interface IGoveeApiService
     /// <param name="deviceId">Device Id Guid as string</param>
     /// <param name="deviceModel">Device Model Number as string</param>
     /// <returns>GoveeApiStat Object</returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task<GoveeApiState> GetDeviceState(string deviceId, string deviceModel);
 
     /// <summary>
@@ -43,6 +50,8 @@ public interface IGoveeApiService
     /// <param name="deviceModel">Device Model Number as string</param>
     /// <param name="on"></param>
     /// <returns></returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task ToggleState(string deviceId, string deviceModel, bool on);
 
     /// <summary>
@@ -52,6 +61,8 @@ public interface IGoveeApiService
     /// <param name="deviceModel">Device Model Number as string</param>
     /// <param name="value">Brightness in Percent as Int</param>
     /// <returns></returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task SetBrightness(string deviceId, string deviceModel, int value);
 
     /// <summary>
@@ -61,6 +72,8 @@ public interface IGoveeApiService
     /// <param name="deviceModel">Device Model Number as string</param>
     /// <param name="color">Rgb Color</param>
     /// <returns></returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task SetColor(string deviceId, string deviceModel, RgbColor color);
 
     /// <summary>
@@ -70,5 +83,7 @@ public interface IGoveeApiService
     /// <param name="deviceModel">Device Model Number as string</param>
     /// <param name="value">Color Temp in Kelvin as Int</param>
     /// <returns></returns>
+        [Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
+
     Task SetColorTemp(string deviceId, string deviceModel, int value);
 }

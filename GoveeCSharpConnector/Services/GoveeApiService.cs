@@ -6,6 +6,7 @@ using GoveeCSharpConnector.Objects;
 
 namespace GoveeCSharpConnector.Services;
 
+[Obsolete("New Api Reference: https://developer.govee.com/reference/" ,true)]
 public class GoveeApiService : IGoveeApiService
 {
     private string _apiKey = string.Empty;
