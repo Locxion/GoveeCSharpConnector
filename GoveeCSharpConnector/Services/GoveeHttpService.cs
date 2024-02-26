@@ -212,6 +212,34 @@ public class GoveeHttpService : IGoveeHttpService
         return serviceResponse;
     }
     /// <inheritdoc/>
+    public async Task<ServiceResponse<List<GoveeScene>>> GetScenes(string deviceId, string deviceModel)
+    {
+        var serviceResponse = new ServiceResponse<List<GoveeScene>>();
+        
+        var jsonPayload = $@"
+        {{
+            ""requestId"": ""{Guid.NewGuid()}"",
+            ""payload"": {{
+                ""sku"": ""{deviceModel}"",
+                ""device"": ""{deviceId}""
+            }}
+        }}";
+        
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
+        if (!response.IsSuccessStatusCode)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = response.ReasonPhrase;
+            return serviceResponse;
+        }
+        // TODO Test response Content
+        serviceResponse.Success = true;
+        serviceResponse.Message = "";
+        return serviceResponse;
+    }
+
+    /// <inheritdoc/>
     public async Task<ServiceResponse<bool>> SetLightScene(string deviceId, string deviceModel, int sceneValue)
     {
         var serviceResponse = new ServiceResponse<bool>();
