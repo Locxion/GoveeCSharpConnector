@@ -14,6 +14,7 @@ public class GoveeHttpService : IGoveeHttpService
     private const string GoveeDevicesEndpoint = "/router/api/v1/user/devices";
     private const string GoveeControlEndpoint = "/router/api/v1/device/control";
     private const string GoveeStateEndpoint = "/router/api/v1/device/state";
+    private const string GoveeScenesEndpoint = "/router/api/v1/device/scenes";
     private readonly HttpClient _httpClient = new();
     private readonly JsonSerializerOptions? _jsonOptions = new()
     {
@@ -126,7 +127,7 @@ public class GoveeHttpService : IGoveeHttpService
         }}";
         
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeStateEndpoint}", content);
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
         if (!response.IsSuccessStatusCode)
         {
             serviceResponse.Success = false;
@@ -160,7 +161,7 @@ public class GoveeHttpService : IGoveeHttpService
         }}";
         
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeStateEndpoint}", content);
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
         if (!response.IsSuccessStatusCode)
         {
             serviceResponse.Success = false;
@@ -198,7 +199,7 @@ public class GoveeHttpService : IGoveeHttpService
         }}";
         
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeStateEndpoint}", content);
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
         if (!response.IsSuccessStatusCode)
         {
             serviceResponse.Success = false;
@@ -210,5 +211,68 @@ public class GoveeHttpService : IGoveeHttpService
         serviceResponse.Message = "";
         return serviceResponse;
     }
+    /// <inheritdoc/>
+    public async Task<ServiceResponse<bool>> SetLightScene(string deviceId, string deviceModel, int sceneValue)
+    {
+        var serviceResponse = new ServiceResponse<bool>();
+        
+        var jsonPayload = $@"
+        {{
+            ""requestId"": ""{Guid.NewGuid()}"",
+            ""payload"": {{
+                ""sku"": ""{deviceModel}"",
+                ""device"": ""{deviceId}"",
+                ""capability"": {{
+                    ""type"": ""devices.capabilities.dynamic_scene"",
+                    ""instance"": ""lightScene"",
+                    ""value"": {sceneValue}
+                }}
+            }}
+        }}";
+        
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
+        if (!response.IsSuccessStatusCode)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = response.ReasonPhrase;
+            return serviceResponse;
+        }
 
+        serviceResponse.Success = true;
+        serviceResponse.Message = "";
+        return serviceResponse;
+    }
+    /// <inheritdoc/>
+    public async Task<ServiceResponse<bool>> SetDiyScene(string deviceId, string deviceModel, int sceneValue)
+    {
+        var serviceResponse = new ServiceResponse<bool>();
+        
+        var jsonPayload = $@"
+        {{
+            ""requestId"": ""{Guid.NewGuid()}"",
+            ""payload"": {{
+                ""sku"": ""{deviceModel}"",
+                ""device"": ""{deviceId}"",
+                ""capability"": {{
+                    ""type"": ""devices.capabilities.dynamic_scene"",
+                    ""instance"": ""diyScene"",
+                    ""value"": {sceneValue}
+                }}
+            }}
+        }}";
+        
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync($"{GoveeApiAddress}{GoveeControlEndpoint}", content);
+        if (!response.IsSuccessStatusCode)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = response.ReasonPhrase;
+            return serviceResponse;
+        }
+
+        serviceResponse.Success = true;
+        serviceResponse.Message = "";
+        return serviceResponse;
+    }
 }

@@ -64,5 +64,20 @@ public interface IGoveeHttpService
     /// <param name="value">Value 1-100</param>
     /// <returns></returns>
     Task<ServiceResponse<bool>> SetBrightness(string deviceId, string deviceModel, int value);
-
+    /// <summary>
+    /// Sets the LightScene of a single Govee Device
+    /// </summary>
+    /// <param name="deviceId">Device Id Guid as string</param>
+    /// <param name="deviceModel">Device Model Number as string</param>
+    /// <param name="sceneValue">Number of the Scene</param>
+    /// <returns></returns>
+    Task<ServiceResponse<bool>> SetLightScene(string deviceId, string deviceModel, int sceneValue);
+    /// <summary>
+    /// Sets the DiyScene of a single Govee Device
+    /// </summary>
+    /// <param name="deviceId">Device Id Guid as string</param>
+    /// <param name="deviceModel">Device Model Number as string</param>
+    /// <param name="sceneValue">Number of the Scene</param>
+    /// <returns></returns>
+    Task<ServiceResponse<bool>> SetDiyScene(string deviceId, string deviceModel, int sceneValue);
 }
