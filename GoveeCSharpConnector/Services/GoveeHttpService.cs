@@ -78,7 +78,7 @@ public class GoveeHttpService : IGoveeHttpService
 
         var jsonPayload = $@"
         {{
-            ""requestId"": ""uuid"",
+            ""requestId"": ""{Guid.NewGuid()}"",
             ""payload"": {{
                 ""sku"": ""{deviceModel}"",
                 ""device"": ""{deviceId}""
@@ -113,7 +113,7 @@ public class GoveeHttpService : IGoveeHttpService
         
         var jsonPayload = $@"
         {{
-            ""requestId"": ""uuid"",
+            ""requestId"": ""{Guid.NewGuid()}"",
             ""payload"": {{
                 ""sku"": ""{deviceModel}"",
                 ""device"": ""{deviceId}"",
@@ -147,7 +147,7 @@ public class GoveeHttpService : IGoveeHttpService
         
         var jsonPayload = $@"
         {{
-            ""requestId"": ""uuid"",
+            ""requestId"": ""{Guid.NewGuid()}"",
             ""payload"": {{
                 ""sku"": ""{deviceModel}"",
                 ""device"": ""{deviceId}"",
@@ -185,7 +185,7 @@ public class GoveeHttpService : IGoveeHttpService
         
         var jsonPayload = $@"
         {{
-            ""requestId"": ""uuid"",
+            ""requestId"": ""{Guid.NewGuid()}"",
             ""payload"": {{
                 ""sku"": ""{deviceModel}"",
                 ""device"": ""{deviceId}"",
